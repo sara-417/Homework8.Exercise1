@@ -23,6 +23,9 @@ class PhotoGalleryFragment : Fragment() {
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
         }
+
+    private val photoGalleryViewModel: PhotoGalleryViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,20 +37,17 @@ class PhotoGalleryFragment : Fragment() {
         return binding.root
     }
 
-    private val photoGalleryViewModel: PhotoGalleryViewModel by viewModels()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 photoGalleryViewModel.galleryItems.collect { items ->
-                    Log.d(TAG, "Response received: $items")
+                    binding.photoGrid.adapter = PhotoListAdapter(items)
                 }
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -17,7 +17,7 @@ class PhotoViewHolder(
     }
 }
 
-class PhotoListAdapter (
+class PhotoListAdapter(
     private val galleryItems: List<GalleryItem>
 ) : RecyclerView.Adapter<PhotoViewHolder>() {
     override fun onCreateViewHolder(

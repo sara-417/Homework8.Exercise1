@@ -1,6 +1,7 @@
 package com.slayton.msu.photogallery.api
 
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 private const val API_KEY = "f35d3bcd23bd778bee1ef68d1174cd90"
 
