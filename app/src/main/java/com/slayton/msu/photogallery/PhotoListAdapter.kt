@@ -11,11 +11,10 @@ class PhotoViewHolder(
     private val binding: ListItemGalleryBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(galleryItem: GalleryItem) {
-        binding.itemImageView.load(galleryItem.url) {
-            placeholder(R.drawable.bill_up_close)
+        binding.itemImageView.load(galleryItem.url)
         }
     }
-}
+
 
 class PhotoListAdapter(
     private val galleryItems: List<GalleryItem>

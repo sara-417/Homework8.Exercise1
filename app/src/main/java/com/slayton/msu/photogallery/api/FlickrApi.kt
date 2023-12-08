@@ -13,6 +13,8 @@ interface FlickrApi {
                 "&nojsoncallback=1" +
                 "&extras=url_s"
     )
-    suspend fun fetchPhotos(): FlickrResponse
+
+    // query for page as a param of the API fetchPhotos
+    suspend fun fetchPhotos(@Query("page") page: Int): FlickrResponse
 
 }

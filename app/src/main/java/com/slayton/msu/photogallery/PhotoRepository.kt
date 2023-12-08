@@ -17,6 +17,8 @@ class PhotoRepository {
         flickrApi = retrofit.create()
     }
 
-    suspend fun fetchPhotos(): List<GalleryItem> =
-        flickrApi.fetchPhotos().photos.galleryItems
+    // add page as a parameter to the PhotoRepository fetchPhotos so
+    // that the current page is passed when fetchPhotos is called
+    suspend fun fetchPhotos(page: Int): List<GalleryItem> =
+        flickrApi.fetchPhotos(page).photos.galleryItems
 }
