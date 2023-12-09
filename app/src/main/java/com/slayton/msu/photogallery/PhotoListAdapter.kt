@@ -2,6 +2,8 @@ package com.slayton.msu.photogallery
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.slayton.msu.photogallery.api.GalleryItem
@@ -15,13 +17,13 @@ class PhotoViewHolder(
         }
     }
 
+// PhotoListAdapter Extends PagingDataAdapter, takes the DiffCallback as a param
+class PhotoListAdapter(diffCallback: DiffUtil.ItemCallback<GalleryItem>) :
+    PagingDataAdapter<GalleryItem, PhotoViewHolder>(diffCallback) {
 
-class PhotoListAdapter(
-    private val galleryItems: List<GalleryItem>
-) : RecyclerView.Adapter<PhotoViewHolder>() {
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+            parent: ViewGroup,
+            viewType: Int
     ): PhotoViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemGalleryBinding.inflate(inflater, parent, false)
@@ -29,9 +31,8 @@ class PhotoListAdapter(
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        val item = galleryItems[position]
-        holder.bind(item)
+        val item = getItem(position)
+        item?.let { holder.bind(it) }
     }
-
-    override fun getItemCount() = galleryItems.size
 }
+

@@ -3,7 +3,9 @@ package com.slayton.msu.photogallery
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.slayton.msu.photogallery.api.GalleryItem
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,18 +16,16 @@ private const val TAG = "PhotoGalleryViewModel"
 class PhotoGalleryViewModel : ViewModel() {
     private val photoRepository = PhotoRepository()
 
-    private val _galleryItems: MutableStateFlow<List<GalleryItem>> =
-        MutableStateFlow(emptyList())
-    val galleryItems: StateFlow<List<GalleryItem>>
-        get() = _galleryItems.asStateFlow()
+    // change galleryItems to a Flow of PagingData instead of a MutableList
+//    call from pagingGetPhotos rather than fetchPhotos
+    val galleryItems: Flow<PagingData<GalleryItem>> = photoRepository.pagingGetPhotos()
 
     init {
         viewModelScope.launch {
             try {
                 // start on page 1 upon initialization
                 val items = photoRepository.fetchPhotos(1)
-                Log.d(TAG, "Items received: $items")
-                _galleryItems.value = items
+//                Log.d(TAG, "Items received: $items")
             } catch (ex: Exception) {
                 Log.e(TAG, "Failed to fetch gallery items", ex)
             }

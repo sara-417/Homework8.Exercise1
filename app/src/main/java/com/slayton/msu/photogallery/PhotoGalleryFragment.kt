@@ -10,8 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import com.slayton.msu.photogallery.api.GalleryItem
 import com.slayton.msu.photogallery.databinding.FragmentPhotoGalleryBinding
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -25,6 +28,8 @@ class PhotoGalleryFragment : Fragment() {
         }
 
     private val photoGalleryViewModel: PhotoGalleryViewModel by viewModels()
+    // make an adapter object here
+    private val adapter = PhotoListAdapter(GalleryItemDiffCallback())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +39,8 @@ class PhotoGalleryFragment : Fragment() {
         _binding =
             FragmentPhotoGalleryBinding.inflate(inflater, container, false)
         binding.photoGrid.layoutManager = GridLayoutManager(context, 3)
+        // bind it to the adapter
+       binding.photoGrid.adapter = adapter
         return binding.root
     }
 
@@ -42,8 +49,10 @@ class PhotoGalleryFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                photoGalleryViewModel.galleryItems.collect { items ->
-                    binding.photoGrid.adapter = PhotoListAdapter(items)
+//                grab from PagingData rather than the mutable list of items?
+                photoGalleryViewModel.galleryItems.collectLatest { pagingData: PagingData<GalleryItem> ->
+//                   use the submitData method to submit the pagingData to the adapter to be displayed
+                    adapter.submitData(pagingData)
                 }
             }
         }
